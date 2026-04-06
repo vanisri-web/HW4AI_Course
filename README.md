@@ -1,6 +1,8 @@
 Name: Vanisri Kyatham
+
 Course: Hardware for Artificial Intelligence and Machine Learning
 Term: Spring 2026
+
 
 Tentative Project Topic: Spiking Neural Network Speedup Chip
 Project Description:
