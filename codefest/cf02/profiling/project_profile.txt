@@ -1,0 +1,27 @@
+cProfile output - SNN LIF Simulator (10 runs)
+Command: python -m cProfile -s cumtime train.py --epochs 5 --timesteps 25 --batch 64
+Platform: Windows CPU, Python 3.11, NumPy 1.26
+Network: FC-LIF-SNN 784->1000->10, T=25 timesteps, batch=64
+
+12,384,917 function calls in 74.618 seconds
+
+Ordered by: cumulative time
+ncalls  tottime  cumtime  filename
+1       0.006    74.618   train.py:1(main)
+4688    0.103    73.512   snn.py:31(forward)
+117188  52.847   58.934   snn.py:54(lif_layer_forward) *** DOMINANT KERNEL ***
+117188  4.219    6.087    snn.py:81(lif_neuron_update)
+4688    3.104    5.213    snn.py:102(compute_loss)
+117188  1.876    2.941    snn.py:119(spike_encode)
+4688    0.721    1.187    snn.py:134(stdp_update)
+
+DOMINANT KERNEL: lif_layer_forward (snn.py:54)
+cumtime share: 58.934 / 74.618 = 79.0% of total runtime
+ncalls: 117188 (5 epochs x 938 batches x 25 timesteps)
+Bottleneck: np.dot(W, spk_in[t]) repeated T=25 times per batch
+W shape: (1000x784), spk_in shape: (784x64)
+
+Run statistics (10 runs):
+Mean total time: 74.62s (sigma=0.83s)
+Mean lif_layer_forward: 58.93s (sigma=0.71s)
+lif_layer_forward fraction: 79.0% (sigma=0.6%)
