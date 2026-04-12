@@ -1,62 +1,32 @@
-\# Interface Selection and Bandwidth Analysis — SNN HW Accelerator
+# Interface Selection and Bandwidth Analysis — SNN HW Accelerator
 
+## Selected Interface: AXI4 On-Chip Bus + HBM2e
 
+## Bandwidth Requirement
 
-\## Selected Interface: AXI4 High-Bandwidth On-Chip Bus + HBM (High Bandwidth Memory)
+To avoid becoming interface-bound at target throughput of 6000 GFLOP/s:
 
+Required BW = 6000 / 59.97 = 100 GB/s minimum
 
+## Interface Comparison
 
-\## Justification
+| Interface | Bandwidth | Sufficient? |
+|-----------|-----------|-------------|
+| PCIe 4.0 x16 | ~32 GB/s | No |
+| DDR5 | ~64 GB/s | No |
+| HBM2e | ~460 GB/s | Yes |
+| On-chip SRAM bus | ~1 TB/s | Yes |
 
-The LIF accelerator requires sustained memory bandwidth to avoid becoming
+## Decision
 
-interface-bound at the target throughput of 6000 GFLOP/s.
+HBM2e is selected. It provides ~460 GB/s — a 4.6x safety margin over
+the required 100 GB/s. On-chip SRAM handles neuron state and weight
+buffering at >1 TB/s, keeping the LIF compute array compute-bound.
 
+## Summary
 
-
-Required bandwidth = Target GFLOP/s / Arithmetic Intensity
-
-= 6000 / 59.97 ≈ 100 GB/s
-
-
-
-Standard interfaces and their bandwidth:
-
-| Interface | Bandwidth |
-
-|-----------|-----------|
-
-| PCIe 4.0 x16 | \~32 GB/s |
-
-| DDR5 | \~64 GB/s |
-
-| HBM2e | \~460 GB/s ✅ |
-
-| On-chip SRAM bus | \~1 TB/s ✅ |
-
-
-
-\## Decision
-
-HBM2e is selected as the off-chip memory interface because it provides
-
-\~460 GB/s, well above the required 100 GB/s. On-chip SRAM with a wide
-
-bus handles neuron state buffering at >1 TB/s, ensuring the accelerator
-
-stays compute-bound rather than interface-bound.
-
-
-
-\## Bandwidth Analysis
-
-\- Required BW at target: 100 GB/s
-
-\- HBM2e provides: 460 GB/s
-
-\- Safety margin: 4.6×
-
-\- This margin allows for burst traffic during spike propagation phases
-
-&#x20; without stalling the compute pipeline.
+- Required bandwidth: 100 GB/s
+- HBM2e provides: 460 GB/s
+- Safety margin: 4.6x
+- Interface bound risk: None at target throughput
 
