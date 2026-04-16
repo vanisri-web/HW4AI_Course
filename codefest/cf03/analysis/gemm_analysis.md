@@ -38,3 +38,12 @@ further toward the compute-bound ridge point on the roofline model.
 - Tiled kernel time: 28.554 ms → 75.21 GFLOP/s
 - Speedup: 4.31x improvement observed
 - GPU: Tesla T4 (Peak: 8100 GFLOP/s, BW: 300 GB/s)
+
+## Nsight Compute Profiling
+Both kernels were profiled using ncu on Google Colab Tesla T4 GPU.
+Naive kernel achieved memory bandwidth near peak with very low compute
+throughput, confirming memory-bound status. Tiled kernel showed reduced
+DRAM traffic and higher compute throughput. On the roofline model,
+the naive kernel plots far left of the ridge point (memory-bound region)
+while the tiled kernel plots closer to the ridge point with higher
+arithmetic intensity of approximately 2.0 FLOP/byte.
