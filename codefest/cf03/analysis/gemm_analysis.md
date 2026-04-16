@@ -32,3 +32,9 @@ compute resources. Additional bottlenecks include shared memory bank
 conflicts and insufficient thread-level parallelism. Increasing tile
 size to 16 or 32 would better hide memory latency and push the kernel
 further toward the compute-bound ridge point on the roofline model.
+
+## Measured Performance Results
+- Naive kernel time: 123.195 ms → 17.43 GFLOP/s
+- Tiled kernel time: 28.554 ms → 75.21 GFLOP/s
+- Speedup: 4.31x improvement observed
+- GPU: Tesla T4 (Peak: 8100 GFLOP/s, BW: 300 GB/s)
