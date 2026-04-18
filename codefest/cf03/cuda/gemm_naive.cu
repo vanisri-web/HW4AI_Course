@@ -28,6 +28,11 @@ int main() {
     cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
     dim3 threads(16, 16);
     dim3 blocks((n + 15) / 16, (n + 15) / 16);
+
+    // Warm-up run: eliminates first-launch GPU initialization overhead from timing
+    gemm_naive<<<blocks, threads>>>(d_A, d_B, d_C, n);
+    cudaDeviceSynchronize();
+
     cudaEvent_t start, stop;
     cudaEventCreate(&start); cudaEventCreate(&stop);
     cudaEventRecord(start);
@@ -41,6 +46,8 @@ int main() {
     printf("Naive kernel time: %.3f ms\n", ms);
     printf("Naive GFLOP/s: %.2f\n", gflops);
     cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost);
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
     cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
     free(h_A); free(h_B); free(h_C);
     return 0;

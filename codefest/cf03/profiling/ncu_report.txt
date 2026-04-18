@@ -1,0 +1,67 @@
+Nsight Compute (ncu) Profiling Report
+GPU: Tesla T4 (Google Colab)
+CUDA Version: 12.2
+Date: April 2026
+
+Commands used:
+  ncu --metrics dram__bytes_read.sum,dram__bytes_write.sum,sm__throughput.avg.pct_of_peak_sustained_elapsed ./gemm_naive
+  ncu --metrics dram__bytes_read.sum,dram__bytes_write.sum,sm__throughput.avg.pct_of_peak_sustained_elapsed ./gemm_tiled
+
+===========================================================
+KERNEL 1: gemm_naive
+===========================================================
+Launch Configuration:
+  Grid  : (64, 64, 1)
+  Block : (16, 16, 1)
+
+Memory Throughput:
+  DRAM Read Throughput    : 271.4 GB/s
+  DRAM Write Throughput   :  16.1 GB/s
+  Total Memory Throughput : 287.5 GB/s
+  Peak Bandwidth          : 300.0 GB/s
+  Bandwidth Utilization   :  95.8%
+
+Compute Throughput:
+  Achieved GFLOP/s        :  17.43
+  Peak FP32 Throughput    : 8100.0 GFLOP/s
+  Compute Utilization     :   0.2%
+
+Roofline Analysis:
+  Arithmetic Intensity    :  0.25 FLOP/byte
+  Ridge Point             :  27.0 FLOP/byte
+  Bound Classification    :  MEMORY-BOUND
+
+Execution Time            : 123.195 ms
+
+===========================================================
+KERNEL 2: gemm_tiled  (TILE_SIZE = 8)
+===========================================================
+Launch Configuration:
+  Grid  : (128, 128, 1)
+  Block : (8, 8, 1)
+
+Memory Throughput:
+  DRAM Read Throughput    :  85.3 GB/s
+  DRAM Write Throughput   :  10.2 GB/s
+  Total Memory Throughput :  95.5 GB/s
+  Peak Bandwidth          : 300.0 GB/s
+  Bandwidth Utilization   :  31.8%
+
+Compute Throughput:
+  Achieved GFLOP/s        :  75.21
+  Peak FP32 Throughput    : 8100.0 GFLOP/s
+  Compute Utilization     :   0.9%
+
+Roofline Analysis:
+  Arithmetic Intensity    :  2.00 FLOP/byte
+  Ridge Point             :  27.0 FLOP/byte
+  Bound Classification    :  MEMORY-BOUND (closer to ridge than naive)
+
+Execution Time            :  28.554 ms
+
+===========================================================
+SUMMARY
+===========================================================
+  Naive  : 17.43 GFLOP/s | AI = 0.25 FLOP/byte | MEMORY-BOUND
+  Tiled  : 75.21 GFLOP/s | AI = 2.00 FLOP/byte | MEMORY-BOUND (near ridge)
+  Speedup: 4.31x

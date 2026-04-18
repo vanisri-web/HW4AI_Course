@@ -48,6 +48,8 @@ int main() {
     printf("Tiled kernel time: %.3f ms\n", ms);
     printf("Tiled GFLOP/s: %.2f\n", gflops);
     cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost);
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
     cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
     free(h_A); free(h_B); free(h_C);
     return 0;
