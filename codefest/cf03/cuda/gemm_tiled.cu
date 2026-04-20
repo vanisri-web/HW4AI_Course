@@ -35,6 +35,9 @@ int main() {
     cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
     dim3 threads(TILE, TILE);
     dim3 blocks(n / TILE, n / TILE);
+    // Warm-up run
+    gemm_tiled<<<blocks, threads>>>(d_A, d_B, d_C, n);
+    cudaDeviceSynchronize();
     cudaEvent_t start, stop;
     cudaEventCreate(&start); cudaEventCreate(&stop);
     cudaEventRecord(start);

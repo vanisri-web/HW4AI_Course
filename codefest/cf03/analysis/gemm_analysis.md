@@ -18,7 +18,7 @@ cooperatively load one tile of A and one tile of B, then reuse that
 data T times before fetching the next tile from DRAM. Because each
 element is loaded once per tile and reused T times, the total number
 of DRAM accesses is reduced by a factor of T=8 compared to the naive
-approach. This raises arithmetic intensity to approximately T/2 = 4
+approach. This raises arithmetic intensity to approximately 2.0
 FLOP/byte, significantly reducing pressure on memory bandwidth and
 moving the kernel closer to the compute-bound region of the roofline.
 
