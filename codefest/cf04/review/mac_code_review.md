@@ -42,61 +42,80 @@ Cycle 5: out = -20
 
 ## Issues Found
 
-### Issue 1 — Missing explicit sign extension in mac_llm_B.v
+### Issue 1 — Blocking assignment inside always_ff in mac_llm_A.v
 
 **(a) Offending lines:**
-out <= out + (a * b);
-
-**(b) Why it is wrong:**
-When multiplying two 8-bit signed operands a and b, the result
-is a 16-bit value. Adding this directly into a 32-bit accumulator
-without explicit sign extension can cause incorrect results for
-negative numbers.
-
-**(c) Corrected version:**
-product = a * b;
-out <= out + 32'(signed'(product));
-
----
-
-### Issue 2 — Blocking assignment inside always_ff in mac_llm_A.v
-
-**(a) Offending lines:**
+```verilog
 always_ff @(posedge clk) begin
     product = a * b;
+```
 
 **(b) Why it is wrong:**
-Blocking assignments (=) inside always_ff can cause simulation
-and synthesis mismatches. Non-blocking assignments (<=) should
-be used inside always_ff blocks.
+Blocking assignments (=) inside always_ff cause simulation and
+synthesis mismatches. All assignments inside always_ff should use
+non-blocking assignments (<=). Using blocking assignments here means
+the value of product is updated immediately rather than at the clock
+edge, which can lead to incorrect synthesis behavior.
 
 **(c) Corrected version:**
+```verilog
 always_ff @(posedge clk) begin
     if (rst)
         out <= 32'sd0;
     else
         out <= out + 32'(signed'(a * b));
 end
+```
 
 ---
 
-### Issue 3 — No comment on reset polarity
+### Issue 2 — Unnecessary intermediate signal in mac_llm_A.v
 
 **(a) Offending lines:**
-if (rst) begin
-    out <= 32'sd0;
+```verilog
+logic signed [15:0] product;
+...
+product = a * b;
+out <= out + 32'(signed'(product));
+```
 
 **(b) Why it is wrong:**
-Neither file adds a comment confirming active-high reset.
-This creates ambiguity for other engineers reading the code.
+The intermediate 16-bit product signal is unnecessary and combined
+with the blocking assignment creates a synthesis risk. mac_llm_B.v
+correctly avoids this by computing the product inline, making the
+code cleaner and safer for synthesis.
 
 **(c) Corrected version:**
+```verilog
+out <= out + 32'(signed'(a * b));
+```
+
+---
+
+### Issue 3 — Reset polarity not commented in either file
+
+**(a) Offending lines:**
+```verilog
+if (rst) begin
+    out <= 32'sd0;
+```
+
+**(b) Why it is wrong:**
+Neither file adds a comment confirming active-high reset behavior.
+This creates ambiguity for other engineers reading the code who
+may not have access to the original specification.
+
+**(c) Corrected version:**
+```verilog
 // rst is active-high synchronous reset
 if (rst) begin
     out <= 32'sd0;
+```
 
 ---
 
 ## Conclusion
-mac_correct.v fixes all issues and passes the testbench with
-correct outputs for all 5 cycles plus reset behavior.
+mac_correct.v fixes all issues: removes the intermediate product
+signal, eliminates the blocking assignment inside always_ff, and
+passes the testbench with correct outputs for all 5 cycles plus
+reset behavior.
