@@ -1,0 +1,7 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1777231889" />
+    <testcase name="test_lif_reset" classname="test_lif_neuron" file="/mnt/c/Users/vanis/Desktop/HW4AI_Course/project/hdl/test_lif_neuron.py" lineno="5" time="0.07812118530273438" sim_time_ns="1.0" ratio_time="12.800625030519068" />
+    <testcase name="test_lif_accumulate" classname="test_lif_neuron" file="/mnt/c/Users/vanis/Desktop/HW4AI_Course/project/hdl/test_lif_neuron.py" lineno="23" time="0.0007512569427490234" sim_time_ns="61.0" ratio_time="81197.252935576" />
+  </testsuite>
+</testsuites>
