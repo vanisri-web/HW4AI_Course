@@ -45,10 +45,9 @@ Cycle 5: out = -20
 ### Issue 1 — Blocking assignment inside always_ff in mac_llm_A.v
 
 **(a) Offending lines:**
-```verilog
-always_ff @(posedge clk) begin
-    product = a * b;
-```
+
+    always_ff @(posedge clk) begin
+        product = a * b;
 
 **(b) Why it is wrong:**
 Blocking assignments (=) inside always_ff cause simulation and
@@ -58,26 +57,23 @@ the value of product is updated immediately rather than at the clock
 edge, which can lead to incorrect synthesis behavior.
 
 **(c) Corrected version:**
-```verilog
-always_ff @(posedge clk) begin
-    if (rst)
-        out <= 32'sd0;
-    else
-        out <= out + 32'(signed'(a * b));
-end
-```
+
+    always_ff @(posedge clk) begin
+        if (rst)
+            out <= 32'sd0;
+        else
+            out <= out + 32'(signed'(a * b));
+    end
 
 ---
 
 ### Issue 2 — Unnecessary intermediate signal in mac_llm_A.v
 
 **(a) Offending lines:**
-```verilog
-logic signed [15:0] product;
-...
-product = a * b;
-out <= out + 32'(signed'(product));
-```
+
+    logic signed [15:0] product;
+    product = a * b;
+    out <= out + 32'(signed'(product));
 
 **(b) Why it is wrong:**
 The intermediate 16-bit product signal is unnecessary and combined
@@ -86,36 +82,41 @@ correctly avoids this by computing the product inline, making the
 code cleaner and safer for synthesis.
 
 **(c) Corrected version:**
-```verilog
-out <= out + 32'(signed'(a * b));
-```
+
+    out <= out + 32'(signed'(a * b));
 
 ---
 
-### Issue 3 — Reset polarity not commented in either file
+### Issue 3 — Missing explicit signed intermediate before widening in mac_llm_B.v
 
 **(a) Offending lines:**
-```verilog
-if (rst) begin
-    out <= 32'sd0;
-```
+
+    out <= out + 32'(signed'(a * b));
 
 **(b) Why it is wrong:**
-Neither file adds a comment confirming active-high reset behavior.
-This creates ambiguity for other engineers reading the code who
-may not have access to the original specification.
+Multiplying two signed [7:0] operands without storing the result
+in an explicitly typed signed [15:0] intermediate signal can cause
+strict synthesis tools to treat the product as unsigned before the
+cast, silently corrupting results for negative inputs. This is an
+accumulator width and sign-extension risk that Verilator and
+Synopsys DC flag in strict SystemVerilog mode.
 
 **(c) Corrected version:**
-```verilog
-// rst is active-high synchronous reset
-if (rst) begin
-    out <= 32'sd0;
-```
+
+    logic signed [15:0] product;
+    assign product = a * b;
+
+    always_ff @(posedge clk) begin
+        if (rst)
+            out <= 32'sd0;
+        else
+            out <= out + {{16{product[15]}}, product};
+    end
 
 ---
 
 ## Conclusion
-mac_correct.v fixes all issues: removes the intermediate product
-signal, eliminates the blocking assignment inside always_ff, and
-passes the testbench with correct outputs for all 5 cycles plus
-reset behavior.
+mac_correct.v fixes all issues: removes the blocking assignment
+inside always_ff, eliminates the unnecessary intermediate signal,
+uses explicit sign-extension, and passes the testbench with correct
+outputs for all 5 cycles plus reset behavior.
