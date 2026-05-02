@@ -16,8 +16,8 @@ module tb_interface;
     assign spike_out_in=1'b0;
     integer pass_count,fail_count;
     task check32(input string name,input logic [31:0] got,input logic [31:0] exp);
-        if(got===exp) begin $display("[PASS] %s",name); pass_count++; end
-        else begin $display("[FAIL] %s: got=0x%08X exp=0x%08X",name,got,exp); fail_count++; end
+        if(got===exp) begin $display("[PASS] %s: got=0x%08X expected=0x%08X",name,got,exp); pass_count++; end
+        else begin $display("[FAIL] %s: got=0x%08X expected=0x%08X",name,got,exp); fail_count++; end
     endtask
     task axi_write(input logic [31:0] addr,input logic [31:0] data);
         s_awvalid=1; s_awaddr=addr; s_wvalid=1; s_wdata=data; s_wstrb=4'hF;
@@ -36,23 +36,23 @@ module tb_interface;
         pass_count=0; fail_count=0;
         s_awvalid=0; s_wvalid=0; s_bready=0; s_arvalid=0; s_rready=0;
         rst_n=0; repeat(4) @(posedge clk); #1; rst_n=1; repeat(2) @(posedge clk); #1;
-        $display("=== Test 1: Write WEIGHT ===");
+        $display("=== Test 1: Write WEIGHT (addr=0x00) = 0x0200 ===");
         axi_write(32'h00,32'h0000_0200);
-        check32("T1 weight_out=0x0200",{16'h0,weight_out},32'h0000_0200);
-        $display("=== Test 2: Read back WEIGHT ===");
+        check32("T1 weight_out after write",{16'h0,weight_out},32'h0000_0200);
+        $display("=== Test 2: Read back WEIGHT register ===");
         axi_read(32'h00,rdata);
-        check32("T2 read WEIGHT=0x0200",rdata,32'h0000_0200);
-        $display("=== Test 3: Write THRESHOLD ===");
+        check32("T2 WEIGHT read-back matches write",rdata,32'h0000_0200);
+        $display("=== Test 3: Write THRESHOLD (addr=0x04) = 0x0600 ===");
         axi_write(32'h04,32'h0000_0600);
-        check32("T3 threshold_out=0x0600",{16'h0,threshold_out},32'h0000_0600);
-        $display("=== Test 4: Read MEMBRANE ===");
+        check32("T3 threshold_out after write",{16'h0,threshold_out},32'h0000_0600);
+        $display("=== Test 4: Read MEMBRANE_RO (addr=0x0C) ===");
         axi_read(32'h0C,rdata);
-        check32("T4 membrane=0x0300",rdata,32'h0000_0300);
+        check32("T4 MEMBRANE passthrough from compute_core",rdata,32'h0000_0300);
         $display("-----------------------------------");
         if(fail_count==0) $display("PASS: All %0d checks passed.",pass_count);
-        else $display("FAIL: %0d checks failed.",fail_count);
+        else $display("FAIL: %0d of %0d checks failed.",fail_count,pass_count+fail_count);
         $display("-----------------------------------");
         $finish;
     end
-    initial begin #50000; $display("FAIL: Timeout."); $finish; end
+    initial begin #50000; $display("FAIL: Simulation timeout."); $finish; end
 endmodule

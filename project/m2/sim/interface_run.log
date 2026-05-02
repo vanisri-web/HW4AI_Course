@@ -1,11 +1,11 @@
-=== Test 1: Write WEIGHT ===
-[PASS] T1 weight_out=0x0200
-=== Test 2: Read back WEIGHT ===
-[PASS] T2 read WEIGHT=0x0200
-=== Test 3: Write THRESHOLD ===
-[PASS] T3 threshold_out=0x0600
-=== Test 4: Read MEMBRANE ===
-[PASS] T4 membrane=0x0300
+=== Test 1: Write WEIGHT (addr=0x00) = 0x0200 ===
+[PASS] T1 weight_out after write: got=0x00000200 expected=0x00000200
+=== Test 2: Read back WEIGHT register ===
+[PASS] T2 WEIGHT read-back matches write: got=0x00000200 expected=0x00000200
+=== Test 3: Write THRESHOLD (addr=0x04) = 0x0600 ===
+[PASS] T3 threshold_out after write: got=0x00000600 expected=0x00000600
+=== Test 4: Read MEMBRANE_RO (addr=0x0C) ===
+[PASS] T4 MEMBRANE passthrough from compute_core: got=0x00000300 expected=0x00000300
 -----------------------------------
 PASS: All 4 checks passed.
 -----------------------------------
