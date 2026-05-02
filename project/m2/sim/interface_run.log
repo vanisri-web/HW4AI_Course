@@ -1,0 +1,12 @@
+=== Test 1: Write WEIGHT ===
+[PASS] T1 weight_out=0x0200
+=== Test 2: Read back WEIGHT ===
+[PASS] T2 read WEIGHT=0x0200
+=== Test 3: Write THRESHOLD ===
+[PASS] T3 threshold_out=0x0600
+=== Test 4: Read MEMBRANE ===
+[PASS] T4 membrane=0x0300
+-----------------------------------
+PASS: All 4 checks passed.
+-----------------------------------
+project/m2/tb/tb_interface.sv:55: $finish called at 216000 (1ps)

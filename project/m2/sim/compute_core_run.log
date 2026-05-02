@@ -1,0 +1,15 @@
+=== Test 1: Accumulate spikes until fire ===
+[PASS] T1 spike1 spike_out=0
+[PASS] T1 spike1 membrane=0x0200
+[PASS] T1 spike2 spike_out=0
+[PASS] T1 spike2 membrane=0x0400
+[PASS] T1 spike3 FIRE spike_out=1
+=== Test 2: Membrane resets to 0 after fire ===
+[PASS] T2 membrane=0x0000
+=== Test 3: No spike when below threshold ===
+[PASS] T3 no fire
+[PASS] T3 membrane=0x0200
+-----------------------------------
+PASS: All 8 checks passed.
+-----------------------------------
+project/m2/tb/tb_compute_core.sv:37: $finish called at 86000 (1ps)
