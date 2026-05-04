@@ -22,8 +22,8 @@ matrix A stream in from the left row by row.
             +------------------+------------------+
 ```
 
-- Row 0 inputs stream from the LEFT (A[0][0], A[0][1])
-- Row 1 inputs stream from the LEFT (A[1][0], A[1][1])
+- Row 0 inputs stream from the LEFT: A[0][0]=1, then A[0][1]=2
+- Row 1 inputs stream from the LEFT: A[1][0]=3, then A[1][1]=4
 - Partial sums accumulate DOWNWARD through rows each cycle
 - Weights never move — they stay fixed in each PE throughout all cycles
 
@@ -37,23 +37,24 @@ matrix A stream in from the left row by row.
 - Expected C = [[19, 22], [43, 50]]
 
 **How it works:**
-- Cycle 1 (k=0): Row 0 receives A[0][0]=1, Row 1 receives A[1][0]=3
-- Cycle 2 (k=1): Row 0 receives A[0][1]=2, Row 1 receives A[1][1]=4
-- Each PE[i][j] accumulates: partial_sum += A[i][k] * B[k][j]
-- In Cycle 1, the active weight column is B column 0 (5, 7)
-- In Cycle 2, the active weight column is B column 1 (6, 8) passed via partial sum flow
+- Cycle 1 (k=0): Both rows receive first column of A. Each PE multiplies input by its fixed weight.
+- Cycle 2 (k=1): Both rows receive second column of A. Each PE accumulates second product.
+- Output C is ready after Cycle 2. Cycles 3 and 4 are pipeline drain and write-back phases.
+- All weights remain fixed in their PEs throughout all 4 cycles.
 
 | Cycle | Row 0 Input | Row 1 Input | PE[0][0] partial sum | PE[0][1] partial sum | PE[1][0] partial sum | PE[1][1] partial sum | Output C |
 |-------|-------------|-------------|----------------------|----------------------|----------------------|----------------------|----------|
 | 1 | A[0][0] = 1 | A[1][0] = 3 | 0+(1x5) = **5** | 0+(1x6) = **6** | 0+(3x5) = **15** | 0+(3x6) = **18** | — |
-| 2 | A[0][1] = 2 | A[1][1] = 4 | 5+(2x7) = **19** | 6+(2x8) = **22** | 15+(4x7) = **43** | 18+(4x8) = **50** | C = [[19,22],[43,50]] |
+| 2 | A[0][1] = 2 | A[1][1] = 4 | 5+(2x7) = **19** | 6+(2x8) = **22** | 15+(4x7) = **43** | 18+(4x8) = **50** | C ready |
+| 3 | 0 (drain) | 0 (drain) | 19 (hold) | 22 (hold) | 43 (hold) | 50 (hold) | C = [[19,22],[43,50]] |
+| 4 | 0 (drain) | 0 (drain) | 19 (hold) | 22 (hold) | 43 (hold) | 50 (hold) | Write to memory |
 
 **Note on dataflow:**
-In Cycle 1, each PE accumulates input * B[0][j] (the first row of weights: 5, 6).
-In Cycle 2, each PE accumulates input * B[1][j] (the second row of weights: 7, 8),
-which streams in via the downward partial sum flow from the row above.
-Weights stay physically fixed in their PEs — the partial sum propagation through
-rows is what enables each PE to participate in the full dot product computation.
+In Cycle 1, each PE accumulates: input * B[0][j] using the first A column (weights 5 and 6 for row 0 PEs).
+In Cycle 2, each PE accumulates: input * B[1][j] using the second A column (weights 7 and 8 via downward partial sum flow).
+Cycles 3 and 4 are pipeline drain cycles — no new inputs arrive, partial sums hold steady,
+and the final result C is written back to off-chip memory.
+All 4 weights (5, 6, 7, 8) remain physically fixed in their PEs throughout all cycles.
 
 **Verification of final result:**
 ```
