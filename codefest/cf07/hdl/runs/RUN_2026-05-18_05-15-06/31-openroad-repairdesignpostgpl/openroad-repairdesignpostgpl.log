@@ -1,0 +1,130 @@
+Reading timing models for corner nom_tt_025C_1v80…
+Reading timing library for the 'nom_tt_025C_1v80' corner at '/home/vanisri/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib'…
+Reading timing models for corner nom_ff_n40C_1v95…
+Reading timing library for the 'nom_ff_n40C_1v95' corner at '/home/vanisri/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ff_n40C_1v95.lib'…
+Reading timing models for corner nom_ss_100C_1v60…
+Reading timing library for the 'nom_ss_100C_1v60' corner at '/home/vanisri/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ss_100C_1v60.lib'…
+Reading OpenROAD database at '/mnt/c/Users/vanis/Desktop/HW4AI_Course/HW4AI_Course/codefest/cf07/hdl/runs/RUN_2026-05-18_05-15-06/27-openroad-globalplacement/synth_top.odb'…
+Reading design constraints file at '/nix/store/ss2cw3sxbrwwx9jl0rrppbw4kgcmgi2n-python3-3.11.9-env/lib/python3.11/site-packages/openlane/scripts/base.sdc'…
+[INFO] Using clock clk…
+[INFO] Setting output delay to: 2
+[INFO] Setting input delay to: 2
+[INFO] Setting load to: 0.033442
+[INFO] Setting clock uncertainty to: 0.25
+[INFO] Setting clock transition to: 0.1499999999999999944488848768742172978818416595458984375
+[INFO] Setting timing derate to: 5%
+[INFO] Setting RC values…
+[INFO RSZ-0027] Inserted 161 input buffers.
+[INFO RSZ-0028] Inserted 68 output buffers.
+[INFO RSZ-0058] Using max wire length 6335um.
+Iteration | Resized | Buffers | Nets repaired | Remaining
+---------------------------------------------------------
+        0 |       0 |       0 |             0 |      7276
+      100 |      97 |       0 |             0 |      7176
+      200 |     182 |       1 |             1 |      7076
+      300 |     273 |       1 |             1 |      6976
+      400 |     368 |       1 |             1 |      6876
+      500 |     456 |       1 |             1 |      6776
+      600 |     543 |       1 |             1 |      6676
+      700 |     632 |       2 |             2 |      6576
+      800 |     716 |       2 |             2 |      6476
+      900 |     805 |       2 |             2 |      6376
+     1000 |     892 |       3 |             3 |      6276
+     1100 |     981 |       6 |             5 |      6176
+     1200 |    1066 |       7 |             6 |      6076
+     1300 |    1157 |       7 |             6 |      5976
+     1400 |    1244 |       7 |             6 |      5876
+     1500 |    1338 |       8 |             7 |      5776
+     1600 |    1426 |       9 |             8 |      5676
+     1700 |    1516 |      10 |             9 |      5576
+     1800 |    1610 |      10 |             9 |      5476
+     1900 |    1697 |      10 |             9 |      5376
+     2000 |    1784 |      10 |             9 |      5276
+     2100 |    1881 |      10 |             9 |      5176
+     2200 |    1977 |      10 |             9 |      5076
+     2300 |    2069 |      10 |             9 |      4976
+     2400 |    2160 |      11 |            10 |      4876
+     2500 |    2253 |      11 |            11 |      4776
+     2600 |    2349 |      11 |            12 |      4676
+     2700 |    2439 |      13 |            15 |      4576
+     2800 |    2527 |      13 |            15 |      4476
+     2900 |    2620 |      13 |            15 |      4376
+     3000 |    2717 |      14 |            17 |      4276
+     3100 |    2815 |      14 |            18 |      4176
+     3200 |    2908 |      14 |            19 |      4076
+     3300 |    3001 |      14 |            19 |      3976
+     3400 |    3096 |      14 |            20 |      3876
+     3500 |    3194 |      14 |            22 |      3776
+     3600 |    3293 |      14 |            24 |      3676
+     3700 |    3385 |      15 |            25 |      3576
+     3800 |    3477 |      15 |            27 |      3476
+     3900 |    3573 |      16 |            29 |      3376
+     4000 |    3664 |      16 |            29 |      3276
+     4100 |    3761 |      16 |            30 |      3176
+     4200 |    3854 |      16 |            30 |      3076
+     4300 |    3942 |      16 |            31 |      2976
+     4400 |    4035 |      16 |            31 |      2876
+     4500 |    4129 |      16 |            32 |      2776
+     4600 |    4225 |      17 |            37 |      2676
+     4700 |    4324 |      18 |            39 |      2576
+     4800 |    4422 |      20 |            46 |      2476
+     4900 |    4518 |      20 |            50 |      2376
+     5000 |    4616 |      21 |            53 |      2276
+     5100 |    4712 |      23 |            63 |      2176
+     5200 |    4809 |      23 |            65 |      2076
+     5300 |    4906 |      23 |            73 |      1976
+     5400 |    4998 |      23 |            76 |      1876
+     5500 |    5094 |      23 |            85 |      1776
+     5600 |    5186 |      23 |            87 |      1676
+     5700 |    5284 |      23 |            93 |      1576
+     5800 |    5377 |      24 |            98 |      1476
+     5900 |    5473 |      24 |           103 |      1376
+     6000 |    5572 |      24 |           103 |      1276
+     6100 |    5669 |      24 |           124 |      1176
+     6200 |    5765 |      25 |           168 |      1076
+     6300 |    5863 |      25 |           211 |       976
+     6400 |    5959 |      25 |           252 |       876
+     6500 |    6055 |      25 |           298 |       776
+     6600 |    6156 |      26 |           333 |       676
+     6700 |    6251 |      26 |           385 |       576
+     6800 |    6345 |      26 |           417 |       476
+     6900 |    6440 |      26 |           462 |       376
+     7000 |    6588 |     112 |           533 |       276
+     7100 |    6988 |     461 |           631 |       176
+     7200 |    7029 |     490 |           646 |        76
+    final |    7029 |     490 |           646 |         0
+---------------------------------------------------------
+[INFO RSZ-0034] Found 476 slew violations.
+[INFO RSZ-0035] Found 172 fanout violations.
+[INFO RSZ-0038] Inserted 490 buffers in 646 nets.
+[INFO RSZ-0039] Resized 7029 instances.
+Placement Analysis
+---------------------------------
+total displacement      16916.0 u
+average displacement        1.7 u
+max displacement            9.9 u
+original HPWL          167848.7 u
+legalized HPWL         184200.0 u
+delta HPWL                   10 %
+
+[INFO DPL-0020] Mirrored 2737 instances
+[INFO DPL-0021] HPWL before          184200.0 u
+[INFO DPL-0022] HPWL after           180367.0 u
+[INFO DPL-0023] HPWL delta               -2.1 %
+[INFO] Setting RC values…
+Setting global connections for newly added cells…
+[INFO] Setting global connections...
+Updating metrics…
+Cell type report:                       Count       Area
+  Fill cell                               278    1043.50
+  Tap cell                               2044    2557.45
+  Timing Repair Buffer                    719    4286.61
+  Inverter                                 87     326.56
+  Sequential cell                          68    1701.63
+  Multi-Input combinational cell         6730   49695.16
+  Total                                  9926   59610.92
+Writing OpenROAD database to '/mnt/c/Users/vanis/Desktop/HW4AI_Course/HW4AI_Course/codefest/cf07/hdl/runs/RUN_2026-05-18_05-15-06/31-openroad-repairdesignpostgpl/synth_top.odb'…
+Writing netlist to '/mnt/c/Users/vanis/Desktop/HW4AI_Course/HW4AI_Course/codefest/cf07/hdl/runs/RUN_2026-05-18_05-15-06/31-openroad-repairdesignpostgpl/synth_top.nl.v'…
+Writing powered netlist to '/mnt/c/Users/vanis/Desktop/HW4AI_Course/HW4AI_Course/codefest/cf07/hdl/runs/RUN_2026-05-18_05-15-06/31-openroad-repairdesignpostgpl/synth_top.pnl.v'…
+Writing layout to '/mnt/c/Users/vanis/Desktop/HW4AI_Course/HW4AI_Course/codefest/cf07/hdl/runs/RUN_2026-05-18_05-15-06/31-openroad-repairdesignpostgpl/synth_top.def'…
+Writing timing constraints to '/mnt/c/Users/vanis/Desktop/HW4AI_Course/HW4AI_Course/codefest/cf07/hdl/runs/RUN_2026-05-18_05-15-06/31-openroad-repairdesignpostgpl/synth_top.sdc'…

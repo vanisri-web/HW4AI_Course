@@ -1,0 +1,38 @@
+94. Printing statistics.
+
+=== synth_top ===
+
+   Number of wires:               8106
+   Number of wire bits:           8630
+   Number of public wires:          26
+   Number of public wire bits:     230
+   Number of ports:                 26
+   Number of port bits:            230
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:               8196
+     $_ANDNOT_                    2578
+     $_AND_                        844
+     $_DFF_PN0_                     68
+     $_MUX_                          8
+     $_NAND_                       353
+     $_NOR_                        276
+     $_NOT_                        159
+     $_ORNOT_                      148
+     $_OR_                         940
+     $_XNOR_                       645
+     $_XOR_                       2177
+
+   Area for cell type $_NOT_ is unknown!
+   Area for cell type $_AND_ is unknown!
+   Area for cell type $_NAND_ is unknown!
+   Area for cell type $_OR_ is unknown!
+   Area for cell type $_NOR_ is unknown!
+   Area for cell type $_XOR_ is unknown!
+   Area for cell type $_XNOR_ is unknown!
+   Area for cell type $_ANDNOT_ is unknown!
+   Area for cell type $_ORNOT_ is unknown!
+   Area for cell type $_MUX_ is unknown!
+   Area for cell type $_DFF_PN0_ is unknown!
+
