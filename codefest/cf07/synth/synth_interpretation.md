@@ -1,35 +1,28 @@
 # Synthesis Interpretation — CF07
 ## Design: synth_top (4×4 Crossbar MAC, Option B Fallback)
-## Tool: Yosys 0.65 (yowasp), Sky130 HD standard cells
+## Tool: OpenLane 2.3.10, Yosys 0.65, OpenROAD, Sky130 HD
 
 ## Clock & Slack
-The synthesis was run targeting a clock period of 10 ns (100 MHz) on the
-sky130 process node. ABC-based STA was unavailable because yowasp-yosys
-does not bundle the ABC binary, so worst-case slack cannot be numerically
-reported. All 24 Yosys optimization passes completed with 0 CHECK errors
-and no timing constraint violations flagged. A full OpenLane run with
-OpenSTA will produce exact slack values for M3.
+The design was synthesized and placed-and-routed at a clock period of
+10 ns (100 MHz) on the sky130 HD process. At the nominal corner
+(25°C, 1.8V), the worst-case setup slack is +1.394 ns and worst-case
+hold slack is +1.239 ns — timing is fully met. At the slow corner
+(100°C, 1.6V), setup slack drops to -4.708 ns with 161 violations,
+meaning the design does not meet timing at that extreme corner. For M3,
+the clock period should be relaxed to ~15 ns to close timing across all corners.
 
 ## Critical Path
-The critical path runs from the input wire registers (x0–x3, w00–w33)
-through the 4-input dot-product multiplier-accumulator tree, terminating
-at the output registers y0–y3 (implemented as $_DFF_PN0_ flip-flops:
-68 total = 17 bits × 4 outputs). The dominant cell types are $_AND_
-(3,938 instances) for partial-product generation and $_XOR_ (2,938
-instances) for the carry-propagate adder network. The carry-chain depth
-across four 8×8 multiply-accumulate operations is the expected timing
-bottleneck.
+The critical path runs from input registers (x0–x3, w00–w33) through
+the 4-input MAC accumulator tree, terminating at output registers y0–y3
+(sky130_fd_sc_hd__dfrtp_1, 68 instances = 17 bits × 4 outputs). The
+dominant cell types along the path are xnor2 (1,124 instances) and
+xor2 (529 instances) for carry/sum generation, and nand2 (557 instances)
+for partial-product logic. The resizer inserted 836 timing-repair buffers
+to help close setup timing.
 
 ## Cell Area
-Total gate count: 8,385 cells after optimization (no liberty area values;
-ABC was skipped). Top three contributors by instance count:
-1. $_AND_ — 3,938 instances (47%), dominant in multiplier logic
-2. $_XOR_ — 2,938 instances (35%), carry/sum generation in adder tree
-3. $_OR_  — 1,313 instances (16%), carry merge and mux logic
-
-## Warnings & Violations
-No hold violations, setup violations, or undriven nets were reported.
-CHECK pass found 0 problems. Notable: the SHARE pass removed 24 redundant
-multiply cells identified as "never active," and OPT_MERGE removed 1,975
-duplicate cells — confirming correct and aggressive optimization across
-all 4 MAC output rows.
+Total cell area: 61,353.8 µm² across 9,799 standard cell instances
+on a die of 391.8 × 402.5 µm. Top three contributors by instance count:
+1. sky130_fd_sc_hd__xnor2 — 1,124 instances, carry/sum logic
+2. sky130_fd_sc_hd__nand2  — 557 instances, partial-product logic
+3. sky130_fd_sc_hd__xor2   — 529 insta
