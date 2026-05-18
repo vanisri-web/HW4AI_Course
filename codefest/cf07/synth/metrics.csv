@@ -1,0 +1,2 @@
+design,tool,tool_version,clock_port,clock_period_ns,total_cells,and_cells,xor_cells,or_cells,not_cells,dff_cells,total_wires,wire_bits,hold_violations,setup_violations,check_errors,note
+synth_top,yowasp-yosys,0.65,clk,10,8385,3938,2938,1313,128,68,1007,13999,0,0,0,STA_unavailable_ABC_not_bundled_in_yowasp
