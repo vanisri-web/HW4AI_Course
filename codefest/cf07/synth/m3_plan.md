@@ -10,9 +10,8 @@ area-intensive even at 4×4 scale. For my SNN core, I expect a larger
 flip-flop count due to per-neuron 16-bit membrane potential state registers
 (LIF neurons require persistent state), but a simpler multiplier structure
 since SNN weights are 1-bit (spike or no spike), which should reduce
-$_AND_ and $_XOR_ counts significantly. I will target the same 10 ns
-clock and run a full OpenLane flow with ABC and OpenSTA to get actual
-slack numbers.
+$_AND_ and $_XOR_ counts significantly. I will target 20 ns clock for M3
+to fully close timing at the slow corner (-1.13 ns at 15 ns).
 
-From this exercise I learned to read Yosys stat output, interpret the
-SHARE and OPT_MERGE passes, and set up a synthesis flow from scratch.
+From this exercise I learned to read Yosys stat output and set up a
+full OpenLane flow from scratch.
