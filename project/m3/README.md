@@ -13,10 +13,10 @@
 | sim/cosim_waveform.vcd | Raw VCD waveform data from simulation |
 | synth/config.json | OpenLane 2 configuration |
 | synth/openlane_run.log | Full OpenLane 2 stdout/stderr |
-| synth/timing_report.txt | STA report: setup slack +1.345ns MET |
-| synth/area_report.txt | Area: 6885 cells, 72479 um^2 |
+| synth/timing_report.txt | STA report: setup slack +0.289ns MET |
+| synth/area_report.txt | Area: 1984 cells, 20682 um^2 |
 | synth/critical_path.md | Critical path analysis |
-| synth/power_report.txt | Power estimate: 39.26 mW |
+| synth/power_report.txt | Power estimate: 0.69 mW |
 | synthesis_notes.md | Narrative: what worked, issues, scope status |
 
 ## Co-Simulation Reproduction
