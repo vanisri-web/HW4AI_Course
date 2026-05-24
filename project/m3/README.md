@@ -7,7 +7,8 @@
 | rtl/top.sv | Integrated top module: instantiates snn_interface + compute_core |
 | tb/tb_top.sv | End-to-end co-simulation testbench; AXI4-Lite master only |
 | sim/cosim_run.log | Co-simulation transcript with PASS verdict |
-| sim/cosim_waveform.vcd | VCD waveform from simulation |
+| sim/cosim_waveform.png | Annotated PNG waveform: Region 1 reset+writes, Region 2 compute, Region 3 result reads |
+| sim/cosim_waveform.vcd | Raw VCD waveform data from simulation |
 | synth/config.json | OpenLane 2 configuration |
 | synth/openlane_run.log | Full OpenLane 2 stdout/stderr |
 | synth/timing_report.txt | STA report: setup slack +1.345ns MET |
