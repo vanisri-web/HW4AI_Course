@@ -5,6 +5,8 @@
 |---|---|
 | README.md | This file - M3 folder index and reproduction instructions |
 | rtl/top.sv | Integrated top module: instantiates snn_interface + compute_core |
+| rtl/interface.sv | AXI4-Lite slave interface module (copied from M2 for OpenLane) |
+| rtl/compute_core.sv | LIF neuron compute core (copied from M2 for OpenLane) |
 | tb/tb_top.sv | End-to-end co-simulation testbench; AXI4-Lite master only |
 | sim/cosim_run.log | Co-simulation transcript with PASS verdict |
 | sim/cosim_waveform.png | Annotated PNG waveform: Region 1 reset+writes, Region 2 compute, Region 3 result reads |
@@ -28,7 +30,7 @@ Simulator: Icarus Verilog (iverilog) 12.0
 Expected output ends with: PASS
 
 ## OpenLane 2 Synthesis Reproduction
-OpenLane 2 version: v2.1.9
+OpenLane 2 version: v2.3.10
 
     cd project/m3
     docker run -it -v $(pwd):/work efabless/openlane2:latest python -m openlane /work/synth/config.json
