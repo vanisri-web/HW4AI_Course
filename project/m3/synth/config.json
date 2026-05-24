@@ -1,9 +1,9 @@
 {
   "DESIGN_NAME": "top",
   "VERILOG_FILES": [
-    "/mnt/c/Users/vanis/Desktop/HW4AI_Course/project/m3/rtl/top.sv",
-    "/mnt/c/Users/vanis/Desktop/HW4AI_Course/project/m3/rtl/interface.sv",
-    "/mnt/c/Users/vanis/Desktop/HW4AI_Course/project/m3/rtl/compute_core.sv"
+    "dir::rtl/top.sv",
+    "dir::rtl/interface.sv",
+    "dir::rtl/compute_core.sv"
   ],
   "CLOCK_PORT": "clk",
   "CLOCK_PERIOD": 10.0,
