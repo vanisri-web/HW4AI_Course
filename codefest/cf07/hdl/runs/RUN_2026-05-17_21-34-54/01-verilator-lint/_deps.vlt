@@ -1,0 +1,5 @@
+`verilator_config
+lint_off -rule DECLFILENAME
+lint_off -rule EOFNEWLINE
+lint_off -rule UNDRIVEN -file "/mnt/c/Users/vanis/Desktop/HW4AI_Course/HW4AI_Course/codefest/cf07/hdl/runs/RUN_2026-05-17_21-34-54/tmp/e730c48d57074236b56900e0710a9cc0.bb.v"
+lint_off -rule UNUSEDSIGNAL -file "/mnt/c/Users/vanis/Desktop/HW4AI_Course/HW4AI_Course/codefest/cf07/hdl/runs/RUN_2026-05-17_21-34-54/tmp/e730c48d57074236b56900e0710a9cc0.bb.v"
