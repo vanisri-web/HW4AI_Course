@@ -1,3 +1,32 @@
+// =============================================================================
+// Module:      top
+// Project:     SNN LIF Neuron Speedup Chip - ECE 410/510 Spring 2026
+// Author:      Vanisri Kyatham
+// Description: Integrated top module. Instantiates snn_interface (AXI4-Lite
+//              slave) and compute_core (LIF neuron) and connects them.
+//              No glue logic required: single clock domain, matching widths.
+//
+// Port List:
+//   clk        - input,  1b  - System clock, rising-edge triggered
+//   rst_n      - input,  1b  - Active-low synchronous reset
+//   s_awvalid  - input,  1b  - AXI write address valid
+//   s_awready  - output, 1b  - AXI write address ready
+//   s_awaddr   - input, 32b  - AXI write byte address
+//   s_wvalid   - input,  1b  - AXI write data valid
+//   s_wready   - output, 1b  - AXI write data ready
+//   s_wdata    - input, 32b  - AXI write data
+//   s_wstrb    - input,  4b  - AXI write byte strobes
+//   s_bvalid   - output, 1b  - AXI write response valid
+//   s_bready   - input,  1b  - AXI write response ready
+//   s_bresp    - output, 2b  - AXI write response (00=OKAY)
+//   s_arvalid  - input,  1b  - AXI read address valid
+//   s_arready  - output, 1b  - AXI read address ready
+//   s_araddr   - input, 32b  - AXI read byte address
+//   s_rvalid   - output, 1b  - AXI read data valid
+//   s_rready   - input,  1b  - AXI read data ready
+//   s_rdata    - output,32b  - AXI read data
+//   s_rresp    - output, 2b  - AXI read response (00=OKAY)
+// =============================================================================
 module top (
     input  logic        clk, rst_n,
     input  logic        s_awvalid,
