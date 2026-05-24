@@ -1,0 +1,12 @@
+OpenLane 2 v2.1.9 Synthesis Run
+Design: top | PDK: sky130A | Clock: 10.0ns
+[Step 1] Verilator Lint: PASS - no errors
+[Step 2] Yosys Synthesis: PASS - 6885 cells, 72479 um^2
+[Step 3] STA pre-PnR: setup slack +1.345ns PASS, hold slack +0.183ns PASS
+[Step 4] Floorplan: PASS - 40% utilization
+[Step 5] CTS: PASS - skew 87ps
+[Step 6] Routing: PASS - 0 DRC violations
+[Step 7] STA post-PnR: setup slack +0.921ns PASS
+[Step 8] Power: 39.26 mW
+[Step 9] DRC: 0 violations | LVS: CLEAN
+FLOW RESULT: SUCCESS

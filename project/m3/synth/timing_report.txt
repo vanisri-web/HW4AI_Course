@@ -1,0 +1,17 @@
+M3 Timing Report - SNN LIF Neuron (top)
+OpenLane 2 v2.1.9 | sky130A | nom_tt_025C_1v80 | Clock 10.0ns
+
+SETUP CHECK:
+  Startpoint: u_compute_core.membrane[7] (FF clocked by clk)
+  Endpoint:   u_compute_core.membrane[15] (FF clocked by clk)
+  Path delay: 8.655 ns
+  Clock period: 10.000 ns
+  Slack (MET): +1.345 ns
+
+HOLD CHECK:
+  Worst hold slack: +0.183 ns (MET)
+
+SUMMARY:
+  Worst setup slack: +1.345 ns  TIMING MET
+  Total negative slack: 0.000 ns
+  Max achievable freq: ~116 MHz
