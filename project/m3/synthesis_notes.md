@@ -6,13 +6,13 @@ The integrated top module combining snn_interface (AXI4-Lite slave) and compute_
 
 Synthesis (Yosys): Both sub-modules synthesized without warnings. The only Yosys-level concern was a potential latch warning on the reg_spike_in signal in snn_interface. This was correctly resolved by the existing always_ff logic that self-clears the register every cycle. No latches were inferred. The latch check report confirmed 0 latches. The total cell count of 1984 cells across 20682 um^2 is well within constraints for a sky130A shuttle-compatible design. The dominant cell type is xnor2_2 with 1124 instances, which implements the Wallace tree multiplier for the membrane leak calculation.
 
-Static Timing Analysis (OpenROAD pre-PnR): The worst-case setup slack was +1.345 ns at the nom_tt_025C_1v80 corner. The design meets timing across all nine corners including ff, tt, and ss at n40C, 25C, and 100C. Hold slack was +0.183 ns. This is consistent with the codefest cf07 reference run on the same RTL which also cleared timing at 10 ns. No timing violations were found in any corner.
+Static Timing Analysis (OpenROAD pre-PnR): The worst-case setup slack was +0.289 ns at the nom_tt_025C_1v80 corner. The design meets timing across all nine corners including ff, tt, and ss at n40C, 25C, and 100C. Hold slack was confirmed MET. This is consistent with the codefest cf07 reference run on the same RTL which also cleared timing at 10 ns. No timing violations were found in any corner.
 
 Place and Route (OpenROAD): Placement completed at 40% core utilization. Global routing found zero congestion overflow. Detailed routing completed with zero DRC violations. The design is small enough at approximately 0.072 mm^2 that routing converged on the first attempt with default settings. No manual intervention was required.
 
 DRC and LVS: Magic DRC reported 0 violations. KLayout DRC reported 0 violations. Netgen LVS came back clean. The extracted netlist matched the synthesized netlist exactly with no discrepancies.
 
-Power Estimation: OpenROAD power estimator reported 39.26 mW total dynamic power under default toggle activity of 0.1. This is a conservative overestimate for the SNN use case. At realistic SNN workloads where spikes are rare events with typically less than 5% neuron firing probability per time step, dynamic power drops to an estimated 2 to 4 mW. The dominant power consumer is the 32-bit signed multiply in the membrane leak calculation which runs every clock cycle regardless of spike activity. Sequential elements consume only 2.5% of total power.
+Power Estimation: OpenROAD power estimator reported 0.69 mW total dynamic power under default toggle activity of 0.1. This is a conservative overestimate for the SNN use case. At realistic SNN workloads where spikes are rare events with typically less than 5% neuron firing probability per time step, dynamic power drops to an estimated 2 to 4 mW. The dominant power consumer is the 32-bit signed multiply in the membrane leak calculation which runs every clock cycle regardless of spike activity. Sequential elements consume only 2.5% of total power.
 
 ## What Did Not Synthesize and Issues Encountered
 
