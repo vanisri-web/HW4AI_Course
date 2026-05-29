@@ -1,10 +1,10 @@
 // =============================================================================
-// Module:      compute_core (synth_top)
+// Module:      synth_top
 // Project:     Spiking Neural Network (SNN) Speedup Chip
 // Course:      ECE 410/510 - Hardware for AI/ML, Spring 2026
 // Author:      Vanisri Kyatham
 // =============================================================================
-module compute_core (
+module synth_top (
     input  logic        clk,
     input  logic        rst_n,
     input  logic        spike_in,
