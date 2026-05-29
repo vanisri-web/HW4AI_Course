@@ -1,35 +1,46 @@
-# Synthesis Interpretation — CF07
-## Design: synth_top (4×4 Crossbar MAC, Option B Fallback)
-## Tool: OpenLane 2.3.10, Yosys 0.65, OpenROAD, Sky130 HD
+# Synthesis Interpretation — CF07 CLLM
+## Design: SNN LIF Neuron Compute Core (synth_top)
+**Author:** Vanisri Kyatham | ECE 510 Spring 2026
+**Tool:** OpenLane 2 | **PDK:** sky130A | **Corner:** nom_tt_025C_1v80
 
-## Clock & Slack
-The design was synthesized and placed-and-routed at a clock period of
-15 ns (66 MHz) on the sky130 HD process. At the nominal corner
-(25°C, 1.8V), the worst-case setup slack is +5.24 ns and worst-case
-hold slack is +1.77 ns — timing is fully met. At the slow corner
-(100°C, 1.6V), setup slack is -1.13 ns, improved significantly from
--4.708 ns at the original 10 ns clock target. For M3, the clock period
-will be further relaxed to 20 ns to fully close timing across all corners.
+## (a) Clock Period and Worst-Case Slack
 
-## Critical Path
-The critical path runs from input registers (x0–x3, w00–w33) through
-the 4-input MAC accumulator tree, terminating at output registers y0–y3
-(sky130_fd_sc_hd__dfrtp_1, 68 instances = 17 bits × 4 outputs). The
-dominant cell types along the path are xnor2 (1,124 instances) and
-xor2 (529 instances) for carry/sum generation, and nand2 (557 instances)
-for partial-product logic. The resizer inserted 836 timing-repair buffers
-to help close setup timing.
+The design was synthesized at a 15 ns clock period (66.7 MHz). At the
+nom_tt_025C_1v80 corner, the Worst Negative Slack (WNS) is 0.0 ns and
+Total Negative Slack (TNS) is 0.0 ns — timing is exactly met with zero
+margin. This means the design is right at the edge of meeting timing.
+The zero-slack result is consistent across the nominal corner.
 
-## Cell Area
-Total cell area: 59,288.1 µm² across 9,690 standard cell instances
-on a die of 391.8 × 402.5 µm. Top three contributors by instance count:
-1. sky130_fd_sc_hd__xnor2 — 1,124 instances, carry/sum logic
-2. sky130_fd_sc_hd__nand2 — 557 instances, partial-product logic
-3. sky130_fd_sc_hd__xor2  — 529 instances, adder tree
+## (b) Critical Path
 
-## Warnings & Violations
-Setup violations remain at slow corner (100°C, 1.6V): worst slack
--1.13 ns, improved from -4.71 ns at 10 ns clock. No hold violations
-in any corner. DRC passed with 0 errors. LVS passed. Antenna violations:
-8 nets/pins flagged with 27 diodes inserted to mitigate. Max fanout
-violations: 4 nets. These
+Source: Input port x0[0] (external input, fanout 71)
+Sink: Register _13667_ (rising-edge flip-flop, clocked by clk)
+Total path delay: approximately 13 ns
+
+The critical path starts at input x0[0] which drives 71 fanout loads.
+This high-fanout net contributes 0.62 ns of delay alone. The path then
+traverses a deep chain of combinational logic implementing the 16x16
+fixed-point multiply-accumulate for membrane leak computation. Dominant
+cell types along the path are or3_2 (0.47-0.63 ns each), a21o_2 (0.22 ns),
+o211a_2 (0.26-0.33 ns), and a211o_2 (0.31-0.39 ns). The multiply carries
+propagate through roughly 20 stages without any pipeline register.
+
+## (c) Total Cell Area and Top Contributors
+
+Total chip area: 72,479.5 um2
+Sequential elements: 1,786.7 um2 (2.47%)
+Total cell count: 6,885
+
+Top three contributors by instance count:
+1. sky130_fd_sc_hd__xnor2_2 — 1,124 instances — Wallace tree multiplier
+2. sky130_fd_sc_hd__nand2_2 — 557 instances — adder carry logic
+3. sky130_fd_sc_hd__nor2_2  — 537 instances — comparator and accumulator
+
+The xnor2 dominance confirms the multiplier is the area bottleneck.
+
+## (d) Warnings and Constraints
+
+No hold violations. No latches inferred. The zero WNS at 15 ns is a
+concern — the design barely passes timing with no margin. The high fanout
+of 71 on input x0[0] is a warning: this net should be buffered to reduce
+slew. No failed constraints were reported.

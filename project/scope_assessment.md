@@ -1,20 +1,22 @@
 # Project Scope Assessment
-**Student:** Vanisri Kyatham
-**Project:** SNN Speedup Chip
-**Course:** ECE 410/510 — Hardware for AI/ML, Spring 2026
+## Project: SNN LIF Neuron Speedup Chip
+**Author:** Vanisri Kyatham | ECE 510 Spring 2026
+**Updated:** CF07 post-synthesis
 
-## Initial Scope
-My project focuses on designing a hardware accelerator for Spiking Neural
-Networks (SNNs). The core idea is to exploit the sparse, event-driven
-nature of SNN computation to reduce energy and latency compared to
-traditional neural network accelerators.
+## Scope Confirmed
 
-## CF07 Scope Update — May 17, 2026
+The project scope remains a single-neuron LIF compute core with AXI4-Lite
+host interface, targeting sky130A at 100 MHz. Synthesis results from CF07
+confirm this scope is achievable: the compute core synthesizes cleanly to
+6885 cells and 72479 um2 at 15 ns with WNS of 0.0 ns. The M3 run at
+10 ns achieved WNS of +0.289 ns confirming 100 MHz is feasible.
 
-Synthesis of the CF06 fallback 4×4 crossbar MAC produced 8,385 gates
-(3,938 AND, 2,938 XOR, 1,313 OR, 68 DFF) at 100 MHz target on sky130.
-This confirms that even a small 4×4 MAC is gate-intensive at 8-bit
-precision. Based on this, I am narrowing my SNN core scope to 8 LIF
-neurons with 1-bit spike weights to keep gate count manageable and
-ensure positive timing slack for M3. Full chip integration will be
-deferred to post-M3 if timing permits.
+No scope reduction is required. The original goal of accelerating the
+dominant SNN kernel which is the LIF membrane update at 79 percent of
+SW runtime is confirmed by synthesis. The design implements exactly the
+membrane times leak plus weight operation in hardware. The 1124 xnor2
+cells confirm the multiplier is present and functional.
+
+For M4, scope will extend to a 1000-entry weight SRAM to support the
+full 784 to 1000 FC-LIF layer benchmarked in M1, replacing the single
+register interface that currently limits end-to-end throughput.

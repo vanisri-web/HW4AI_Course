@@ -1,23 +1,48 @@
-module synth_top (
-    input  wire        clk,
-    input  wire        rst_n,
-    input  wire signed [7:0] x0, x1, x2, x3,
-    input  wire signed [7:0] w00, w01, w02, w03,
-    input  wire signed [7:0] w10, w11, w12, w13,
-    input  wire signed [7:0] w20, w21, w22, w23,
-    input  wire signed [7:0] w30, w31, w32, w33,
-    output reg signed [16:0] y0, y1, y2, y3
+// =============================================================================
+// Module:      compute_core (synth_top)
+// Project:     Spiking Neural Network (SNN) Speedup Chip
+// Course:      ECE 410/510 - Hardware for AI/ML, Spring 2026
+// Author:      Vanisri Kyatham
+// =============================================================================
+module compute_core (
+    input  logic        clk,
+    input  logic        rst_n,
+    input  logic        spike_in,
+    input  logic [15:0] weight,
+    input  logic [15:0] threshold,
+    input  logic [15:0] leak_factor,
+    output logic        spike_out,
+    output logic [15:0] membrane
 );
+    logic signed [31:0] membrane_wide;
+    logic signed [31:0] leaked;
+    logic signed [31:0] next_membrane;
 
-    always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
-            y0 <= 0; y1 <= 0; y2 <= 0; y3 <= 0;
-        end else begin
-            y0 <= w00*x0 + w01*x1 + w02*x2 + w03*x3;
-            y1 <= w10*x0 + w11*x1 + w12*x2 + w13*x3;
-            y2 <= w20*x0 + w21*x1 + w22*x2 + w23*x3;
-            y3 <= w30*x0 + w31*x1 + w32*x2 + w33*x3;
-        end
+    always_comb begin
+        leaked = ($signed(membrane) * $signed({1'b0, leak_factor})) >>> 15;
+        if (spike_in)
+            next_membrane = leaked + $signed({{16{weight[15]}}, weight});
+        else
+            next_membrane = leaked;
     end
 
+    always_ff @(posedge clk) begin
+        if (!rst_n) begin
+            membrane  <= 16'h0000;
+            spike_out <= 1'b0;
+        end else begin
+            if (next_membrane >= $signed({{16{threshold[15]}}, threshold})) begin
+                spike_out <= 1'b1;
+                membrane  <= 16'h0000;
+            end else begin
+                spike_out <= 1'b0;
+                if (next_membrane > 32'sh00007FFF)
+                    membrane <= 16'h7FFF;
+                else if (next_membrane < 32'shFFFF8000)
+                    membrane <= 16'h8000;
+                else
+                    membrane <= next_membrane[15:0];
+            end
+        end
+    end
 endmodule
