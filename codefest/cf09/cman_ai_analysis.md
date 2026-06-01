@@ -34,7 +34,7 @@ Each MAC operation = 2 FLOPs
 Each PE does 9 MACs = 18 FLOPs
 4 PEs running in parallel = 4 x 18 = 72 FLOPs per patch
 Across all 900 output patches for one full 32x32:
-Total FLOPs per invocation = 64,800 FLOPs
+Total FLOPs per invocation = 72 x 900 = 64,800 FLOPs
 
 ## Task 3: Bytes Transferred
 
@@ -42,20 +42,27 @@ Reuse Pattern: GEMM-style weight reuse across output patches.
 
 ### Lower Bound (No Data Reuse)
 
-Every time a weight or pixel is needed, it goes all the way to off-chip memory
-and fetches it even if it was just used one patch ago.
+Every value fetched fresh from off-chip memory, no reuse at all.
 
-Pixels: 9 pixels x 1 byte x 900 patches = 8,100 bytes
-Weights for all 4 PEs: 4 x 9 weights x 1 byte x 900 patches = 32,400 bytes
-Bytes_lower = (9 + 36) x 900 = 45 x 900 = 40,500 bytes
-Lower bound = 40,500 bytes. This gives the lowest possible AI.
+Input pixels:  9 pixels x 1 byte x 900 patches          =  8,100 bytes
+Weights:       4 PEs x 9 weights x 1 byte x 900 patches  = 32,400 bytes
+Output writes: 4 PEs x 1 INT32 x 4 bytes x 900 patches   = 14,400 bytes
+
+Bytes_lower = (9 + 36 + 16) x 900 = 61 x 900 = 54,900 bytes
+Lower bound = 54,900 bytes. This gives the lowest possible AI.
 
 ### Upper Bound (Perfect On-Chip Data Reuse for Weights)
 
-Weights loaded once: 4 x 9 x 1 byte = 36 bytes
-Pixels streamed across all patches: 9 x 900 = 8,100 bytes
-Bytes_upper = 36 + 8,100 = 8,136 bytes
-Upper bound = 8,136 bytes. This gives the highest possible AI.
+Weights loaded once and reused across all 900 patches.
+Pixels are streamed (each patch uses a different window, no reuse possible).
+Outputs must still be written off-chip.
+
+Weights loaded once: 4 x 9 x 1 byte                   =     36 bytes
+Pixels streamed:     9 pixels x 1 byte x 900 patches   =  8,100 bytes
+Output writes:       4 PEs x 1 INT32 x 4 bytes x 900   = 14,400 bytes
+
+Bytes_upper = 36 + 8,100 + 14,400 = 22,536 bytes
+Upper bound = 22,536 bytes. This gives the highest possible AI.
 
 ## Task 4: Arithmetic Intensity
 
@@ -63,20 +70,20 @@ AI = Total FLOPs / Total Bytes. From Task 2: FLOPs = 64,800
 
 | Bound | FLOPs | Bytes | AI (FLOP/byte) |
 |-------|-------|-------|----------------|
-| Low (No reuse) | 64,800 | 40,500 | 1.60 |
-| Upper (Weight reuse) | 64,800 | 8,136 | 7.96 |
+| Low (No reuse, incl. output writes) | 64,800 | 54,900 | 1.18 |
+| Upper (Weight reuse, incl. output writes) | 64,800 | 22,536 | 2.87 |
 
 ### Sky130A Platform at 100 MHz
 
 Peak compute = 4 PEs x 1 MAC/cycle x 100 MHz x 2 FLOPs/MAC = 800 MOPS
-Peak BW = 330 MB/s (AXI4-Lite 32-bit bus)
-Ridge Point = 800 / 330 = 2.42 FLOP/byte
+Peak BW = 330 MB/s (AXI4-Lite 32-bit bus at 100 MHz: 4 bytes/cycle x 100 MHz)
+Ridge Point = 800 MOPS / 330 MB/s = 2.42 FLOP/byte
 
-AI = 1.60 is left of the ridge (2.42), Memory bound with no reuse.
-AI = 7.96 is right of the ridge (2.42), Compute bound with weight reuse.
+AI = 1.18 is left of the ridge (2.42), Memory bound with no reuse.
+AI = 2.87 is right of the ridge (2.42), Compute bound with weight reuse.
 
-At AI = 1.60, attainable performance = 330 x 1.60 = 528 MOPS
-At AI = 7.96, attainable performance = Min(330 x 7.96, 800) = 800 MOPS (Compute ceiling)
+At AI = 1.18, attainable performance = 330 x 1.18 = 389 MOPS
+At AI = 2.87, attainable performance = Min(330 x 2.87, 800) = 800 MOPS (Compute ceiling)
 
 ## Task 5: Bottleneck Identification and Improvement
 
