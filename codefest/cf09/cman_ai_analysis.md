@@ -1,4 +1,4 @@
-# CMAN AI Analysis - CF09
+# CMAN Analysis - CF09
 ECE 410/510 Spring 2026 | Vanisri Kyatham
 
 ## Task 1: Dominant Kernel Identification
