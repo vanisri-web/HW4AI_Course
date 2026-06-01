@@ -1,22 +1,20 @@
 # Roofline Analysis - CF09
 
-The LIF synaptic current kernel has an arithmetic intensity ranging from
-0.57 FLOP/byte (lower bound, no data reuse) to 13.06 FLOP/byte (upper bound,
-full weight reuse across T=25 timesteps). The sky130 ridge point is 0.5
-FLOP/byte, so at both bounds the kernel falls in the compute-bound region of
-the sky130 roofline.
+The 3x3 CONV2D kernel has an arithmetic intensity ranging from 1.18 FLOP/byte
+(lower bound, no data reuse, including output writes) to 2.87 FLOP/byte (upper
+bound, full weight reuse, pixels streamed, outputs written). The sky130 ridge
+point is 2.42 FLOP/byte (800 MOPS / 330 MB/s).
 
-Despite being compute-bound, the projected peak throughput of 0.2 GFLOP/s is
-far below the M2 CPU baseline attainable performance of 1306 GFLOP/s. The gap
-is not caused by memory bandwidth. The AXI4-Lite interface at 400 MB/s is
-sufficient for this kernel memory traffic. The bottleneck is the single-MAC
-serial compute core where only one multiply-accumulate executes per clock
-cycle, yielding no data-level parallelism. The compute ceiling is set purely
-by this single-MAC throughput at 100 MHz.
+At AI = 1.18, the kernel is memory-bound, sitting left of the ridge. Attainable
+performance = 330 x 1.18 = 389 MOPS. At AI = 2.87, the kernel is compute-bound,
+sitting just right of the ridge. Attainable performance = 800 MOPS (compute
+ceiling). The kernel straddles the ridge point depending on reuse pattern.
 
-Since the projected path was used, the dominant uncertainty is the ops/cycle
-assumption. The synthesis confirms timing closure at 10 ns but does not count
-actual MAC completions per cycle. FSM control overhead and AXI4-Lite handshake
-latency will reduce effective throughput below the projected 0.2 GFLOP/s.
-Converting this to a real measurement requires adding a cycle counter register
-to the design and reading it via cocotb after a representative 1000x784 MVM.
+Despite being near the compute ceiling at the upper bound, the projected
+throughput of 0.0008 GFLOP/s is far below 800 MOPS. The gap is caused entirely
+by the AXI4-Lite interface bottleneck: only 9 of every 120 cycles perform actual
+MAC computation giving 7.5% utilisation. The dominant uncertainty in this
+projection is the ops/cycle assumption. Synthesis confirms timing closure at
+10 ns but does not count actual MAC completions. Adding a cycle counter register
+at AXI4-Lite address 0x20 and reading it via cocotb after a representative
+900-patch inference would convert this projection to a real measurement.
