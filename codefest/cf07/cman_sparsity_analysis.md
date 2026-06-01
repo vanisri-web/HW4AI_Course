@@ -52,11 +52,13 @@ $$\boxed{M_{sparse} = 8N^2(1-s) + 4(N+1) \text{ bytes}}$$
 
 $$S_{FLOPs} = \frac{C_{dense}}{C_{sparse}} = \frac{2N^2}{2N^2(1-s)} = \frac{1}{1-s}$$
 
+$$\boxed{S_{FLOPs}(s) = \frac{1}{1-s}}$$
+
 For 2× speedup:
 
 $$\frac{1}{1-s} = 2 \implies 1-s = \frac{1}{2} \implies s = 0.5$$
 
-$$\boxed{S = 50\%}$$
+$$\boxed{s = 0.5 \text{ (50\% sparsity gives 2× FLOPs speedup)}}$$
 
 At 50% sparsity, sparse MVM is 2× faster than dense in terms of FLOPs.
 

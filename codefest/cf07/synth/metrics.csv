@@ -1,0 +1,14 @@
+metric,value
+design_name,synth_top
+clock_period_ns,15
+worst_negative_slack_ns,0.0
+total_negative_slack_ns,0.0
+corner,nom_tt_025C_1v80
+cell_count,6885
+chip_area_um2,72479.5136
+sequential_area_um2,1786.7136
+sequential_area_pct,2.47
+top_cell_xnor2,1124
+top_cell_nand2,557
+top_cell_nor2,537
+hold_violations,0

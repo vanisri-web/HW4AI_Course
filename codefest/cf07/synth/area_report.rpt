@@ -1,0 +1,18 @@
+108. Printing statistics.
+
+=== synth_top ===
+
+   Number of wires:               6843
+   Number of wire bits:           7047
+   Number of cells:               6885
+     sky130_fd_sc_hd__xnor2_2     1124
+     sky130_fd_sc_hd__nand2_2      557
+     sky130_fd_sc_hd__nor2_2       537
+     sky130_fd_sc_hd__a21o_2       330
+     sky130_fd_sc_hd__a21oi_2      360
+     sky130_fd_sc_hd__and2_2       245
+     sky130_fd_sc_hd__or2_2        206
+     sky130_fd_sc_hd__dfrtp_2       68
+
+   Chip area for module '\synth_top': 72479.513600
+     of which used for sequential elements: 1786.713600 (2.47%)
