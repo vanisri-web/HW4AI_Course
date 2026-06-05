@@ -1,0 +1,18 @@
+VCD info: dumpfile cosim_waveform.vcd opened for output.
+[66000] HOST: Reset done
+[336000] CHECK 1 PASS: WEIGHT=0x0100
+[376000] CHECK 2 PASS: THRESHOLD=0x0200
+[376000] HOST: Injecting spikes via interface
+[516000] HOST: After spike 1 membrane=0x01dd
+[656000] HOST: After spike 2 membrane=0x00f1
+[796000] HOST: After spike 3 membrane=0x0000
+[936000] HOST: After spike 4 membrane=0x01dd
+[1076000] HOST: After spike 5 membrane=0x00f1
+[1216000] HOST: After spike 6 membrane=0x0000
+[1216000] HOST: Reading result via AXI
+[1216000] CHECK 3 PASS: membrane=0x0000 observed via AXI (spike fired)
+[1256000] CHECK 4 PASS: final membrane=0x0000 via AXI
+========================================
+PASS
+========================================
+tb/tb_top.sv:79: $finish called at 1305000 (1ps)

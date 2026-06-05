@@ -1,3 +1,12 @@
+## Milestone 4 — Final Submission
+
+This repository contains the complete M4 submission for the SNN LIF Neuron
+Hardware Accelerator (ECE 410/510, Spring 2026). All M4 deliverables are in
+project/m4/. The design justification report is at
+project/m4/report/design_justification.pdf.
+
+---
+
 Name: Vanisri Kyatham
 
 Course: Hardware for Artificial Intelligence and Machine Learning

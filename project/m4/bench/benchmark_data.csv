@@ -1,0 +1,8 @@
+metric,sw_value,sw_source,hw_value,hw_source,is_projected
+total_runtime_s,74.6,measured Apple M2 timed run,37240,cycle-count from synthesis,projected
+throughput_GFLOP_s,0.052,measured total FLOPs/time,0.0008,100MHz x 2FLOP x 7.5%,projected
+clock_MHz,N/A,N/A,100,OpenLane timing slack +0.289ns,projected
+power_mW,N/A,N/A,0.69,OpenLane nom_tt_025C_1v80,projected
+mac_utilization_pct,N/A,N/A,7.5,45 bus cycles per 1 MAC,projected
+speedup,1.0,baseline,0.002,projected HW / measured SW,projected
+energy_mJ,N/A,N/A,0.429,0.69mW x 0.621s,projected
